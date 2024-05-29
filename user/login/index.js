@@ -64,9 +64,9 @@ export default function Login() {
       <TouchableOpacity style={styles.loginButton} onPress={handlehomescr}>
         <Text style={styles.loginButtonText}>LOGIN</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={handleregister}>
+      <TouchableOpacity>
         <Text style={styles.registerText}>
-          Tidak mempunyai akun? <Text style={styles.registerLink}>Daftar sekarang</Text>
+          Tidak mempunyai akun? <Text  onPress={handleregister} style={styles.registerLink}>Daftar sekarang</Text>
         </Text>
       </TouchableOpacity>
     </View>
