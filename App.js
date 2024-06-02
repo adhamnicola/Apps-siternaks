@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {View, Text, TouchableOpacity, Image} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Login, Register, First, Homescr } from './user/route'; 
-import Icon from 'react-native-vector-icons/Ionicons';  
+import {Login, Register, First, Homescr, Dashboard} from './user/route';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -22,7 +22,6 @@ const headerOption = {
   },
 };
 
-
 function HeaderCustome(props) {
   return (
     <View>
@@ -34,53 +33,59 @@ function HeaderCustome(props) {
 function App() {
   return (
     <NavigationContainer>
-       <Stack.Navigator>
-      <Stack.Screen
-        name="First"
-        component={First}
-        // options={{
-        //   ...headerOption,
-        //   HeaderCustome: (props) => <headerTitle {...props} />, 
-        //   title: "Tampilan awal",
-        // }}
-      />
+      <Stack.Navigator>
+        <Stack.Screen
+          name="First"
+          component={First}
+          // options={{
+          //   ...headerOption,
+          //   HeaderCustome: (props) => <headerTitle {...props} />,
+          //   title: "Tampilan awal",
+          // }}
+        />
 
-      <Stack.Screen
-        name="Login"
-        component={Login}
-        options={{
-          ...headerOption,
-          HeaderCustome: (props) => <headerTitle {...props} />, 
-          title: "Halaman Login",
-        }}
-      />
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{
+            ...headerOption,
+            HeaderCustome: props => <headerTitle {...props} />,
+            title: 'Halaman Login',
+          }}
+        />
 
-    <Stack.Screen
-        name="Home"
-        component={Homescr}
-        // options={{
-        //   ...headerOption,
-        //   HeaderCustome: (props) => <headerTitle {...props} />, 
-        //   title: "Tampilan awal",
-        // }}
-      />
+        <Stack.Screen
+          name="Home"
+          component={Homescr}
+          // options={{
+          //   ...headerOption,
+          //   HeaderCustome: (props) => <headerTitle {...props} />,
+          //   title: "Tampilan awal",
+          // }}
+        />
 
-<Stack.Screen
-        name="Register"
-        component={Register}
-        options={{
-          ...headerOption,
-          HeaderCustome: (props) => <headerTitle {...props} />, 
-          title: "Registrasi",
-        }}
-      />
+        <Stack.Screen
+          name="Register"
+          component={Register}
+          options={{
+            ...headerOption,
+            HeaderCustome: props => <headerTitle {...props} />,
+            title: 'Registrasi',
+          }}
+        />
 
-
-
-    </Stack.Navigator>
+        <Stack.Screen
+          name="Dashboard"
+          component={Dashboard}
+          options={{
+            ...headerOption,
+            HeaderCustome: props => <headerTitle {...props} />,
+            title: 'Dashboard',
+          }}
+        />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
 
 export default App;
