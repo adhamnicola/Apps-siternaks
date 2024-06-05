@@ -6,71 +6,77 @@ import {
   Image,
   TouchableOpacity,
   StatusBar,
+  ScrollView, // Import ScrollView
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 const DashboardScreen = () => {
   const navigation = useNavigation();
 
+  
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
-      <View style={styles.header}>
-        <Text style={styles.greeting}>Selamat pagi, peternak</Text>
-        <Image
-          source={require('../../asset/farmer.png')}
-          style={styles.avatar}
-        />
-      </View>
-      <View style={styles.clockContainer}>
-        <Image
-          source={require('../../asset/peternakan.png')}
-          style={styles.backgroundImage}
-        />
-        <Text style={styles.clockText}>9:41 AM</Text>
-      </View>
-      <View style={styles.menuContainer}>
-        <View style={styles.menuRow}>
-          <TouchableOpacity
-            style={styles.menuItem}
-            onPress={() => navigation.navigate('DataHewan')}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.header}>
+          <Text style={styles.greeting}>Selamat pagi, peternak</Text>
+          <View style={styles.avatarContainer}>
             <Image
-              source={require('../../asset/description.png')}
-              style={styles.menuIcon}
+              source={require('../../asset/farmer.png')}
+              style={styles.avatar}
             />
-            <Text style={styles.menuText}>Data Hewan</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.menuItem}
-            onPress={() => navigation.navigate('InputDataHewan')}>
-            <Image
-              source={require('../../asset/input.png')}
-              style={styles.menuIcon}
-            />
-            <Text style={styles.menuText}>Input Data Hewan</Text>
-          </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.menuRow}>
-          <TouchableOpacity
-            style={styles.menuItem}
-            onPress={() => navigation.navigate('Monitoring')}>
-            <Image
-              source={require('../../asset/monitoring.png')}
-              style={styles.menuIcon}
-            />
-            <Text style={styles.menuText}>Monitoring</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.menuItem}
-            onPress={() => navigation.navigate('Informasi')}>
-            <Image
-              source={require('../../asset/info.png')}
-              style={styles.menuIcon}
-            />
-            <Text style={styles.menuText}>Informasi</Text>
-          </TouchableOpacity>
+        <View style={styles.clockContainer}>
+          <Image
+            source={require('../../asset/peternakan.png')}
+            style={styles.backgroundImage}
+          />
+          <Text style={styles.clockText}>9:41 AM</Text>
         </View>
-      </View>
+        <View style={styles.menuContainer}>
+          <View style={styles.menuRow}>
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={() => navigation.navigate('DataHewan')}>
+              <Image
+                source={require('../../asset/description.png')}
+                style={styles.menuIcon}
+              />
+              <Text style={styles.menuText}>Data Hewan</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={() => navigation.navigate('InputDataHewan')}>
+              <Image
+                source={require('../../asset/input.png')}
+                style={styles.menuIcon}
+              />
+              <Text style={styles.menuText}>Input Data Hewan</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.menuRow}>
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={() => navigation.navigate('Monitoring')}>
+              <Image
+                source={require('../../asset/monitoring.png')}
+                style={styles.menuIcon}
+              />
+              <Text style={styles.menuText}>Monitoring</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={() => navigation.navigate('Informasi')}>
+              <Image
+                source={require('../../asset/info.png')}
+                style={styles.menuIcon}
+              />
+              <Text style={styles.menuText}>Informasi</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
       <View style={styles.footer}>
         <TouchableOpacity
           style={styles.footerIcon}
@@ -113,6 +119,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  scrollContainer: {
+    flexGrow: 1,
     padding: 16,
   },
   header: {
@@ -126,10 +135,18 @@ const styles = StyleSheet.create({
     color: '#333',
     fontWeight: 'bold',
   },
-  avatar: {
+  avatarContainer: {
     width: 60,
     height: 60,
-    borderRadius: 20,
+    borderRadius: 30, // half of the width and height to make it round
+    backgroundColor: '#0F7C4B', // set the background color
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25, // half of the width and height to make it round
   },
   clockContainer: {
     alignItems: 'center',
@@ -176,7 +193,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
   },
   footer: {
-    height:75,
+    height: 75,
     flexDirection: 'row',
     justifyContent: 'space-around',
     paddingVertical: 10,

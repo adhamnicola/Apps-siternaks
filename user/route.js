@@ -3,4 +3,5 @@ import Register from './register';
 import First from './first';
 import Homescr from './homescr';
 import Dashboard from './dashboard';
-export {Login, Register, First, Homescr, Dashboard};
+import Informasi from './informasi';
+export {Login, Register, First, Homescr, Dashboard, Informasi};
