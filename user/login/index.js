@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -6,18 +7,23 @@ import {
   StyleSheet,
   Image,
   StatusBar,
+  Alert,
+  ScrollView,
+  Dimensions,
 } from 'react-native';
-import React, {useState} from 'react';
 import CheckBox from '@react-native-community/checkbox';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { baseUrl } from '../baseurl';
+
+const { width, height } = Dimensions.get('window');
 
 export default function Login() {
   const navigation = useNavigation();
   const handleregister = () => {
     navigation.navigate('Register');
-  };
-  const handlehomescr = () => {
-    navigation.navigate('Homescr');
   };
 
   const handledashboard = () => {
@@ -28,76 +34,102 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
 
-  const handleLogin = () => {
-    console.log('Email:', email);
-    console.log('Password:', password);
-    console.log('Remember Me:', rememberMe);
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post(`${baseUrl.url}/login`, {
+        email: email,
+        password: password,
+      });
+
+      console.log(response.data);
+
+      if (response.status === 200) {
+        const token = response.data.access_token;
+        await AsyncStorage.setItem('access_token', token);
+
+        Alert.alert('Login Berhasil', 'Anda telah masuk.');
+        handledashboard(); // Navigate to dashboard after successful login
+      } else {
+        Alert.alert('Login Gagal', 'Email atau password salah.');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+    }
   };
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-      <Image source={require('../../asset/logo2.png')} style={styles.image} />
-      <View style={styles.formContainer}>
-        <Text style={styles.title}>Masuk</Text>
-        <Text style={styles.label}>Email</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Masukan email anda"
-          value={email}
-          onChangeText={setEmail}
-        />
-        <Text style={styles.label}>Kata Sandi</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Masukan kata sandi anda"
-          secureTextEntry={true}
-          value={password}
-          onChangeText={setPassword}
-        />
-        <View style={styles.rememberMeContainer}>
-          <CheckBox value={rememberMe} onValueChange={setRememberMe} />
-          <Text style={styles.rememberMeText}>Ingatkan saya</Text>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.container}>
+        <StatusBar barStyle="dark-content" />
+        <Image source={require('../../asset/logo2.png')} style={styles.image} />
+        <View style={styles.formContainer}>
+          <Text style={styles.title}>Masuk</Text>
+          <Text style={styles.label}>Email</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Masukan email anda"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+          <Text style={styles.label}>Kata Sandi</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Masukan kata sandi anda"
+            secureTextEntry={true}
+            value={password}
+            onChangeText={setPassword}
+          />
+          <View style={styles.rememberMeContainer}>
+            <CheckBox value={rememberMe} onValueChange={setRememberMe} />
+            <Text style={styles.rememberMeText}>Ingatkan saya</Text>
+            <TouchableOpacity>
+              <Text style={styles.forgotPassword}>Lupa kata sandi</Text>
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+            <Text style={styles.loginButtonText}>LOGIN</Text>
+          </TouchableOpacity>
           <TouchableOpacity>
-            <Text style={styles.forgotPassword}>Lupa kata sandi</Text>
+            <Text style={styles.registerText}>
+              Tidak mempunyai akun?{' '}
+              <Text onPress={handleregister} style={styles.registerLink}>
+                Daftar sekarang
+              </Text>
+            </Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.loginButton} onPress={handlehomescr}>
-          <Text onPress={handledashboard} style={styles.loginButtonText}>
-            LOGIN
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text style={styles.registerText}>
-            Tidak mempunyai akun?{' '}
-            <Text onPress={handleregister} style={styles.registerLink}>
-              Daftar sekarang
-            </Text>
-          </Text>
-        </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: 'white',
   },
   image: {
     width: '100%',
-    height: 360,
-    resizeMode: 'contain',
+    height: height * 0.3,
+    // resizeMode: 'contain',
   },
   formContainer: {
     flex: 2,
     padding: 20,
     backgroundColor: 'white',
-    borderTopLeftRadius: 45,
-    borderTopRightRadius: 45,
-    borderShadow: 40,
-    marginTop: -35,
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 5,
+    elevation: 5,
+    marginTop: -15,
   },
   title: {
     fontSize: 32,
@@ -127,7 +159,7 @@ const styles = StyleSheet.create({
   },
   rememberMeText: {
     marginLeft: 5,
-    marginRight: 250,
+    marginRight: 'auto',
     fontSize: 16,
   },
   forgotPassword: {
@@ -135,7 +167,7 @@ const styles = StyleSheet.create({
     color: '#007BFF',
   },
   loginButton: {
-    backgroundColor: '#68B684',
+    backgroundColor: '#0F7C4B',
     borderRadius: 5,
     paddingVertical: 15,
     alignItems: 'center',

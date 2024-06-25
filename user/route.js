@@ -3,4 +3,8 @@ import Register from './register';
 import First from './first';
 import Homescr from './homescr';
 import Dashboard from './dashboard';
-export {Login, Register, First, Homescr, Dashboard};
+import Profile from './Profile';
+import Informasi from './informasi';
+import Input_data_hewan from './input_data_hewan'
+
+export {Input_data_hewan, Informasi, Profile, Login, Register, First, Homescr, Dashboard};

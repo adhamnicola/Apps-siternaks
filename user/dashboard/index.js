@@ -6,8 +6,12 @@ import {
   Image,
   TouchableOpacity,
   StatusBar,
+  ScrollView,
+  Dimensions,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+
+const {width, height} = Dimensions.get('window');
 
 const DashboardScreen = () => {
   const navigation = useNavigation();
@@ -15,66 +19,69 @@ const DashboardScreen = () => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
-      <View style={styles.header}>
-        <Text style={styles.greeting}>Selamat pagi, peternak</Text>
-        <Image
-          source={require('../../asset/farmer.png')}
-          style={styles.avatar}
-        />
-      </View>
-      <View style={styles.clockContainer}>
-        <Image
-          source={require('../../asset/peternakan.png')}
-          style={styles.backgroundImage}
-        />
-        <Text style={styles.clockText}>9:41 AM</Text>
-      </View>
-      <View style={styles.menuContainer}>
-        <View style={styles.menuRow}>
-          <TouchableOpacity
-            style={styles.menuItem}
-            onPress={() => navigation.navigate('DataHewan')}>
-            <Image
-              source={require('../../asset/description.png')}
-              style={styles.menuIcon}
-            />
-            <Text style={styles.menuText}>Data Hewan</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.menuItem}
-            onPress={() => navigation.navigate('InputDataHewan')}>
-            <Image
-              source={require('../../asset/input.png')}
-              style={styles.menuIcon}
-            />
-            <Text style={styles.menuText}>Input Data Hewan</Text>
-          </TouchableOpacity>
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        <View style={styles.header}>
+          <Text style={styles.greeting}>Selamat pagi, peternak</Text>
+          <Image
+            source={require('../../asset/farmer.png')}
+            style={styles.avatar}
+          />
         </View>
-        <View style={styles.menuRow}>
-          <TouchableOpacity
-            style={styles.menuItem}
-            onPress={() => navigation.navigate('Monitoring')}>
-            <Image
-              source={require('../../asset/monitoring.png')}
-              style={styles.menuIcon}
-            />
-            <Text style={styles.menuText}>Monitoring</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.menuItem}
-            onPress={() => navigation.navigate('Informasi')}>
-            <Image
-              source={require('../../asset/info.png')}
-              style={styles.menuIcon}
-            />
-            <Text style={styles.menuText}>Informasi</Text>
-          </TouchableOpacity>
+        <View style={styles.clockContainer}>
+          <Image
+            source={require('../../asset/peternakan.png')}
+            style={styles.backgroundImage}
+          />
+          <Text style={styles.clockText}>9:41 AM</Text>
         </View>
-      </View>
+        <View style={styles.menuContainer}>
+          <View style={styles.menuRow}>
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={() => navigation.navigate('DataHewan')}>
+              <Image
+                source={require('../../asset/description.png')}
+                style={styles.menuIcon}
+              />
+              <Text style={styles.menuText}>Data Hewan</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={() => navigation.navigate('Input_data_hewan')}>
+              <Image
+                source={require('../../asset/input.png')}
+                style={styles.menuIcon}
+              />
+              <Text style={styles.menuText}>Input Data Hewan</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.menuRow}>
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={() => navigation.navigate('Monitoring')}>
+              <Image
+                source={require('../../asset/monitoring.png')}
+                style={styles.menuIcon}
+              />
+              <Text style={styles.menuText}>Monitoring</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={() => navigation.navigate('Informasi')}>
+              <Image
+                source={require('../../asset/info.png')}
+                style={styles.menuIcon}
+              />
+              <Text style={styles.menuText}>Informasi</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
+
       <View style={styles.footer}>
         <TouchableOpacity
           style={styles.footerIcon}
-          onPress={() => navigation.navigate('Home')}>
+          onPress={() => navigation.navigate('Dashboard')}>
           <Image
             source={require('../../asset/home.png')}
             style={styles.footerIconImage}
@@ -90,9 +97,9 @@ const DashboardScreen = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.footerIcon}
-          onPress={() => navigation.navigate('Notifications')}>
+          onPress={() => navigation.navigate('Input_data_hewan')}>
           <Image
-            source={require('../../asset/notif.png')}
+            source={require('../../asset/camera.png')}
             style={styles.footerIconImage}
           />
         </TouchableOpacity>
@@ -113,6 +120,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  scrollViewContent: {
     padding: 16,
   },
   header: {
@@ -122,13 +131,13 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   greeting: {
-    fontSize: 25,
+    fontSize: width * 0.06,
     color: '#333',
     fontWeight: 'bold',
   },
   avatar: {
-    width: 60,
-    height: 60,
+    width: width * 0.15,
+    height: width * 0.15,
     borderRadius: 20,
   },
   clockContainer: {
@@ -137,21 +146,19 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     width: '100%',
-    height: 160,
+    height: height * 0.25,
     borderRadius: 10,
-    borderShadow: 40,
-    marginTop: 80,
   },
   clockText: {
     position: 'absolute',
-    fontSize: 50,
+    fontSize: width * 0.12,
     color: '#fff',
     fontWeight: 'bold',
-    marginTop: 125,
+    marginTop: 50,
   },
   menuContainer: {
     flex: 1,
-    marginTop: 60,
+    marginBottom: 2,
   },
   menuRow: {
     flexDirection: 'row',
@@ -160,36 +167,39 @@ const styles = StyleSheet.create({
   },
   menuItem: {
     backgroundColor: '#0F7C4B',
-    padding: 18,
+    padding: width * 0.04,
     borderRadius: 10,
     alignItems: 'center',
     flex: 1,
     marginHorizontal: 8,
   },
   menuIcon: {
-    width: 60,
-    height: 60,
+    width: width * 0.15,
+    height: width * 0.15,
     marginBottom: 8,
   },
   menuText: {
     color: '#fff',
-    fontSize: 25,
+    fontSize: width * 0.05,
   },
   footer: {
-    height:75,
+    width: '100%',
+    height: height * 0.1,
     flexDirection: 'row',
     justifyContent: 'space-around',
     paddingVertical: 10,
     backgroundColor: '#0F7C4B',
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
+    position: 'absolute',
+    bottom: 0,
   },
   footerIcon: {
     alignItems: 'center',
   },
   footerIconImage: {
-    width: 50,
-    height: 50,
+    width: width * 0.12,
+    height: width * 0.12,
   },
 });
 

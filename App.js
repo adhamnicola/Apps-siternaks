@@ -5,7 +5,16 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Login, Register, First, Homescr, Dashboard} from './user/route';
+import {
+  Login,
+  Register,
+  First,
+  Homescr,
+  Dashboard,
+  Profile,
+  Informasi,
+  Input_data_hewan,
+} from './user/route';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const Stack = createNativeStackNavigator();
@@ -71,6 +80,35 @@ function App() {
             ...headerOption,
             HeaderCustome: props => <headerTitle {...props} />,
             title: 'Registrasi',
+          }}
+        />
+        <Stack.Screen
+          name="Profile"
+          component={Profile}
+          options={{
+            ...headerOption,
+            HeaderCustome: props => <headerTitle {...props} />,
+            title: 'Profile',
+          }}
+        />
+
+        <Stack.Screen
+          name="Informasi"
+          component={Informasi}
+          options={{
+            ...headerOption,
+            HeaderCustome: props => <headerTitle {...props} />,
+            title: 'Informasi',
+          }}
+        />
+
+        <Stack.Screen
+          name="Input_data_hewan"
+          component={Input_data_hewan}
+          options={{
+            ...headerOption,
+            HeaderCustome: props => <headerTitle {...props} />,
+            title: 'Input_data_hewan',
           }}
         />
 
