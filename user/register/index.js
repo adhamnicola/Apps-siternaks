@@ -15,12 +15,13 @@ import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import {baseUrl} from '../baseurl';
+import {baseUrl} from '../baseurl'; // Pastikan baseurl.js sudah sesuai
 
 const {width, height} = Dimensions.get('window');
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
+
   const handleLogin = () => {
     navigation.navigate('Login');
   };
@@ -33,7 +34,7 @@ const RegisterScreen = () => {
 
   const handleRegister = async () => {
     try {
-      const response = await axios.post(`${baseUrl.url}/register`, {
+      const response = await axios.post(`${baseUrl}/register`, {
         name: name,
         email: email,
         nama_peternakan: namaPeternak,
@@ -132,7 +133,6 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: height * 0.3,
-    // resizeMode: 'cover',
   },
   formContainer: {
     flexGrow: 1,

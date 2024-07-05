@@ -1,19 +1,4 @@
-<<<<<<< HEAD
-// InformasiCard.js
-import React from 'react';
-import {View, Text, Image, StyleSheet} from 'react-native';
-
-const InformasiCard = ({title, description, image}) => {
-  return (
-    <View style={styles.card}>
-      <Image source={{uri: image}} style={styles.image} />
-      <View style={styles.textContainer}>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.description}>{description}</Text>
-      </View>
-    </View>
-=======
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -22,103 +7,68 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
+import axios from 'axios';
+import {baseUrl} from '../baseurl';
 
-const InformasiScreen = () => {
-  const informasiList = [
-    {
-      id: 1,
-      title: 'Kandang Juga Berpengaruh Terhadap Pertumbuhan Hewan Ternak',
-      description: 'Kandang sapi merupakan salah satu prasarana pokok dalam setiap usaha peternakan. Kandang berfungsi sebagai...',
-      image: require('../../asset/kandang.jpeg'), // Replace with your image path
-    },
-    {
-      id: 2,
-      title: 'Mau Dapat Omzet Puluhan Juta dari Gemukin Sapi? Ini Rahasianya',
-      description: 'Selain pemotongan dan pemerahan, ternyata ada juga lho usaha ternak penggemukan sapi. Dalam kegiatan penggemukan, sapi yang tadinya...',
-      image: require('../../asset/sapi.png'), // Replace with your image path
-    },
-    {
-      id: 3,
-      title: 'Usaha Ternak Kambing Jawa untuk Pemula, Ini Tips agar Berhasil',
-      description: 'Usaha ternak kambing Jawa yang mudah bagi pemula. Ternak kambing jenis Jawa memiliki peluang usaha yang tadinya...',
-      image: require('../../asset/kambing.png'), // Replace with your image path
-    },
-  ];
+const InformasiScreen = ({navigation}) => {
+  const [informasiList, setInformasiList] = useState([]);
+
+  useEffect(() => {
+    fetchInformasi();
+  }, []);
+
+  const fetchInformasi = async () => {
+    try {
+      const response = await axios.get(`${baseUrl.url}/informasis`);
+      setInformasiList(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const renderDescription = description => {
+    const maxLength = 100;
+    if (description.length > maxLength) {
+      return (
+        <Text style={styles.cardDescription}>
+          {description.substring(0, maxLength)}...
+          <TouchableOpacity>
+            <Text style={styles.readMore}> Baca Lebih Lanjut</Text>
+          </TouchableOpacity>
+        </Text>
+      );
+    }
+    return <Text style={styles.cardDescription}>{description}</Text>;
+  };
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity>
-          <Text style={styles.backButton}>{'<'}</Text>
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Informasi</Text>
-      </View>
       {informasiList.map(info => (
-        <View key={info.id} style={styles.card}>
-          <Image source={info.image} style={styles.cardImage} />
+        <TouchableOpacity
+          key={info.id}
+          style={styles.card}
+          onPress={() => navigation.navigate('Informasi_detail', {info})}>
+          <Image
+            source={{
+              uri: `http://192.168.1.101:8888/storage/informasis/${info.gambar}`,
+            }}
+            style={styles.cardImage}
+          />
           <View style={styles.cardContent}>
-            <Text style={styles.cardTitle}>{info.title}</Text>
-            <Text style={styles.cardDescription}>{info.description}</Text>
+            <Text style={styles.cardTitle}>{info.judul}</Text>
+            {renderDescription(info.deskripsi)}
           </View>
-        </View>
+        </TouchableOpacity>
       ))}
     </ScrollView>
->>>>>>> 35768edcece2a45fd6f1acc610ada103c27d6e58
   );
 };
 
 const styles = StyleSheet.create({
-<<<<<<< HEAD
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    overflow: 'hidden',
-    marginVertical: 10,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    shadowOffset: {width: 0, height: 2},
-  },
-  image: {
-    width: '100%',
-    height: 200,
-  },
-  textContainer: {
-    padding: 10,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  description: {
-    fontSize: 14,
-    color: '#555',
-  },
-});
-
-export default InformasiCard;
-=======
   container: {
     flex: 1,
     backgroundColor: '#fff',
     padding: 16,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  backButton: {
-    fontSize: 30,
-    color: '#333',
-    marginRight: 16,
-  },
-  headerText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#00A500',
   },
   card: {
     backgroundColor: '#fff',
@@ -126,6 +76,7 @@ export default InformasiCard;
     marginBottom: 16,
     overflow: 'hidden',
     elevation: 2,
+    borderShadow: 20,
   },
   cardImage: {
     width: '100%',
@@ -144,7 +95,10 @@ export default InformasiCard;
     fontSize: 14,
     color: '#666',
   },
+  readMore: {
+    fontSize: 14,
+    color: '#1E90FF',
+  },
 });
 
 export default InformasiScreen;
->>>>>>> 35768edcece2a45fd6f1acc610ada103c27d6e58

@@ -6,16 +6,21 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import axios from 'axios';
+import {baseUrl} from '../baseurl'; // Ensure baseUrl is correctly imported
 
 const CameraGalleryScreen = () => {
   const [imageUri, setImageUri] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState(null);
 
   const handleOpenCamera = () => {
     const options = {
       mediaType: 'photo',
-      includeBase64: false,
+      includeBase64: true,
     };
 
     launchCamera(options, response => {
@@ -25,6 +30,7 @@ const CameraGalleryScreen = () => {
         console.log('ImagePicker Error: ', response.errorCode);
       } else if (response.assets && response.assets.length > 0) {
         setImageUri(response.assets[0].uri);
+        uploadImage(response.assets[0]);
       }
     });
   };
@@ -32,7 +38,7 @@ const CameraGalleryScreen = () => {
   const handleOpenGallery = () => {
     const options = {
       mediaType: 'photo',
-      includeBase64: false,
+      includeBase64: true,
     };
 
     launchImageLibrary(options, response => {
@@ -42,8 +48,37 @@ const CameraGalleryScreen = () => {
         console.log('ImagePicker Error: ', response.errorCode);
       } else if (response.assets && response.assets.length > 0) {
         setImageUri(response.assets[0].uri);
+        uploadImage(response.assets[0]);
       }
     });
+  };
+
+  const uploadImage = async image => {
+    setLoading(true);
+    const formData = new FormData();
+    formData.append('file', {
+      uri: image.uri,
+      type: image.type,
+      name: image.fileName,
+    });
+
+    try {
+      const response = await axios.post(
+        `${baseUrl.url}/uploadgambar`, // Ensure the correct URL endpoint
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      );
+      setResult(response.data);
+    } catch (error) {
+      console.error('Error uploading image: ', error);
+      Alert.alert('Error', 'There was an error uploading the image.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const showImagePickerOptions = () => {
@@ -85,6 +120,21 @@ const CameraGalleryScreen = () => {
           />
         </TouchableOpacity>
       </View>
+      {loading && <ActivityIndicator size="large" color="#0F7C4B" />}
+      {result && (
+        <View style={styles.resultContainer}>
+          <Text style={styles.resultText}>Hasil Klasifikasi:</Text>
+          <Text style={styles.resultDetail}>
+            Terdeteksi: {result.Terdeteksi}
+          </Text>
+          <Text style={styles.resultDetail}>
+            Persentase: {result.Persentase}
+          </Text>
+          <Text style={styles.resultDetail}>
+            Estimasi Berat: {result['Estimasi Berat']}
+          </Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -141,6 +191,19 @@ const styles = StyleSheet.create({
   captureButtonImage: {
     width: 40,
     height: 40,
+  },
+  resultContainer: {
+    padding: 20,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 10,
+    margin: 20,
+  },
+  resultText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  resultDetail: {
+    fontSize: 16,
   },
 });
 

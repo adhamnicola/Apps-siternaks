@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -6,20 +6,60 @@ import {
   Image,
   TouchableOpacity,
   StatusBar,
+  Dimensions,
 } from 'react-native';
+import axios from 'axios';
 import {useNavigation} from '@react-navigation/native';
+import {baseUrl} from '../baseurl'; // pastikan baseUrl terimport dengan benar
 
 const {width, height} = Dimensions.get('window');
 
 const DashboardScreen = () => {
   const navigation = useNavigation();
+  const [waktu, setWaktu] = useState(null);
+  const [ucapan, setUcapan] = useState('Selamat pagi, peternak');
+  const [loading, setLoading] = useState(true);
 
-  
+  useEffect(() => {
+    const fetchWaktu = async () => {
+      try {
+        const response = await axios.get(
+          'http://worldtimeapi.org/api/timezone/Asia/Jakarta',
+        );
+        const waktuBaru = new Date(response.data.datetime);
+        const waktuString = waktuBaru.toLocaleTimeString('id-ID', {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true,
+        });
+        setWaktu(waktuString);
+
+        const jam = waktuBaru.getHours();
+        if (jam >= 5 && jam < 12) {
+          setUcapan('Selamat pagi, peternak');
+        } else if (jam >= 12 && jam < 18) {
+          setUcapan('Selamat siang, peternak');
+        } else if (jam >= 18 && jam < 21) {
+          setUcapan('Selamat sore, peternak');
+        } else {
+          setUcapan('Selamat malam, peternak');
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching the time:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchWaktu();
+  }, []);
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
       <View style={styles.header}>
-        <Text style={styles.greeting}>Selamat pagi, peternak</Text>
+        <Text style={styles.greeting}>{ucapan}</Text>
         <Image
           source={require('../../asset/farmer.png')}
           style={styles.avatar}
@@ -30,7 +70,7 @@ const DashboardScreen = () => {
           source={require('../../asset/peternakan.png')}
           style={styles.backgroundImage}
         />
-        <Text style={styles.clockText}>9:41 AM</Text>
+        <Text style={styles.clockText}>{loading ? 'Loading...' : waktu}</Text>
       </View>
       <View style={styles.menuContainer}>
         <View style={styles.menuRow}>
@@ -45,7 +85,7 @@ const DashboardScreen = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.menuItem}
-            onPress={() => navigation.navigate('InputDataHewan')}>
+            onPress={() => navigation.navigate('Input_data_hewan')}>
             <Image
               source={require('../../asset/input.png')}
               style={styles.menuIcon}
@@ -74,6 +114,7 @@ const DashboardScreen = () => {
           </TouchableOpacity>
         </View>
       </View>
+
       <View style={styles.footer}>
         <TouchableOpacity
           style={styles.footerIcon}
@@ -152,12 +193,13 @@ const styles = StyleSheet.create({
   },
   menuContainer: {
     flex: 1,
-    marginBottom: 2,
+    marginBottom: 1,
+    
   },
   menuRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 16,
+    marginTop: 10,
   },
   menuItem: {
     backgroundColor: '#0F7C4B',
@@ -177,7 +219,8 @@ const styles = StyleSheet.create({
     fontSize: width * 0.05,
   },
   footer: {
-    height:75,
+    width: '110%',
+    height: 70,
     flexDirection: 'row',
     justifyContent: 'space-around',
     paddingVertical: 10,
@@ -186,6 +229,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 15,
     position: 'absolute',
     bottom: 0,
+    paddingHorizontal: 16,
   },
   footerIcon: {
     alignItems: 'center',

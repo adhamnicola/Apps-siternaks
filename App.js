@@ -14,6 +14,7 @@ import {
   Profile,
   Informasi,
   Input_data_hewan,
+  Informasi_detail,
 } from './user/route';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -99,6 +100,16 @@ function App() {
             ...headerOption,
             HeaderCustome: props => <headerTitle {...props} />,
             title: 'Informasi',
+          }}
+        />
+
+        <Stack.Screen
+          name="Informasi_detail"
+          component={Informasi_detail}
+          options={{
+            ...headerOption,
+            HeaderCustome: props => <headerTitle {...props} />,
+            title: 'Informasi_detail',
           }}
         />
 
